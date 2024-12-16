@@ -101,6 +101,29 @@ Once you've changed the file permissions, try connecting to the server again:
 
 ![](images/4_connection_established.png)
 
+Clone github repo into the ec2:
+
+![](images/5_clone_github_url.png)
+
+Using `ls` and `cd` commands, go to the `github-api` directory.
+
+![](images/6_go_to_github_api.png)
+
+And we see the shell script inside the subdirectory:
+
+![](images/7_shell_script.png)
+
+Prerequisites to run shell script, exporting your github username and token
+
+![](images/8_export_username_and_token.png)
+
+Run the script. In my case no users with read access were found:
+
+![](images/9_no_users.png)
+
+I have also tried to run this script for one of the github organizations that I have created in my github for the purposes of this project. The name of the organization is "devops-group-24", github repo name is "shell".
+
+![](images/10_script_for_my%20organization.png)
 
 ## **5. Writing the Shell Script**
 ### **Script File:**
@@ -141,3 +164,61 @@ Once you've changed the file permissions, try connecting to the server again:
    ```bash
    export USERNAME="your-github-username"
    export TOKEN="your-github-token"
+
+2. Execute the script with arguments:
+   ```bash
+   ./list-users.sh <github_organization_repo_owner> <repo_name>
+
+### Expected Output:
+- JSON response filtered by `jq` to display usernames and permissions:
+   
+   ```   json
+    {
+        "login": "someuser",
+        "permissions": {
+            "pull": true,
+            "push": false,
+            "admin": false
+        }
+    }
+   ```
+
+---
+
+## **7. Improving the Script**
+1. **Comment Section:**
+- Add metadata at the top of the script:
+    ```bash
+    # Author: Aishe
+    # Purpose: List collaborators for a GitHub repository
+    # Version: v1.0
+
+2. **Add Hepler Function:**
+- Provide better error messages and usage hints:
+    ```bash
+    function helper {
+        expected_cmd_args=2
+        if [ $# -ne $expected_cmd_args]; then
+            echo "please execute the script with required cmd args"
+            echo "asd"
+    }
+
+3. **Call Helper Function:**
+- Before the script
+    ```bash
+    hepler()
+
+---
+
+## 8. Key Features of the Script
+- Modular design with functions.
+- Use of curl for API requests.
+- Parsing JSON responses using jq.
+- Dynamic inputs via command-line arguments.
+
+---
+
+## Key Takeaways
+- Automating repetitive tasks saves time and ensures accuracy.
+- APIs provide a programmatic way to interact with services.
+- Tools like curl and jq simplify scripting tasks.
